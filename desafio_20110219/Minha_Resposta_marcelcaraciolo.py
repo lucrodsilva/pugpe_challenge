@@ -2,29 +2,6 @@
 Desafio PUG-PE  
 ID: 2
 Semana: 19/02/2011
-<<<<<<< HEAD
-
-Problema:
-
-    Escreva uma funcao que reverta a ordem das palavras em uma string. Por exemplo, sua funcao deve transformar a string 'Do or do not,
-    there is no try.'  para 'try. no is there not, or Do'.  Assuma que todas palavras sao separadas por espaco e trate todos os sinais de pontuacao
-    como caracteres.
-
-    >>> x =  "attempt"
-    >>> ret = reverse_string(x)
-    >>> ret
-    attempt
-    >>> x = 'I am going to jail.'
-    >>> ret = reverse_string(x)
-    jail. to going am I
-    >>> x = 'Python como linguagem eh poderosa, facil e divertida.'
-    >>> x = []
-    >>> ret = reverse_string(x)
-    >>> ret
-    divertida. e facil poderosa, eh linguagem como Python
-     
-  Seu trabalho eh construir essa lista de elementos.  Favor utilizar Testes usando doctest ou UnitTest para validar sua solucao.
-=======
 Formulado por : Daker Fernandes e Marcel Caraciolo
 
 Problema:
@@ -74,33 +51,40 @@ Problema:
 
      
   Seu trabalho eh construir essa funcao.  Favor utilizar Testes usando doctest ou UnitTest para validar sua solucao.
->>>>>>> upstream/master
 
 """
 
+def shortestpath(graph,start,end,path,pathes=[]):
+    path = path[:]
+    path+= [start]      
+    
+    if start == end:
+        return path
+       
+    shortest = None
+    for neighbor in graph[start]:
+        if neighbor not in path:
+            newPath = shortestpath(graph,neighbor,end,path)
+            if newPath:
+                if not shortest or len(newPath) <= len(shortest):
+                    shortest = newPath[:]
+                    pathes.append(tuple(shortest))  
+    return shortest
+
+
+def short_path(graph,start,end):
+    if not graph or (start not in graph) or (end not in graph): return None   
+    pathes = []
+    shortestpath(graph,start,end,[],pathes)
+    return pathes
+    
+    
+    
 import unittest
 
 
-<<<<<<< HEAD
-class Desafio1(unittest.TestCase):
-
-    def test_simple_string(self):
-        sampleString = 'attempt'
-        self.assertEqual('attempt',
-                    reverse_string(sampleString))
-
-    def test_empty_string(self):
-        sampleString = ''
-        self.assertEqual('',
-                    reverse_string(sampleString))
-
-    def test_complex_string(self):
-        sampleString = 'Python como linguagem eh poderosa, facil e divertida.'
-        self.assertEqual('divertida. e facil poderosa, eh linguagem como Python',
-                    reverse_string(sampleString))
-
-=======
 class Desafio2(unittest.TestCase):
+
 
     def test_empty_graph(self):
         graph = {}
@@ -116,6 +100,7 @@ class Desafio2(unittest.TestCase):
                      'F': ['C']}
         self.assertEqual(None, short_path(graph,'A','Z'))
 
+
     def test_inexistent_path(self):
         graph = {'A': ['B', 'C'],
                      'B': ['C', 'D'],
@@ -125,15 +110,6 @@ class Desafio2(unittest.TestCase):
                      'F': ['C']}
         self.assertEqual([], short_path(graph,'A','E'))
 
-    def test_complex_path(self):    
-        graph = {'A': ['B', 'C'],
-                 'B': ['D', 'E'],
-                 'C': ['D'],
-                 'D': ['E'],
-                 'E': []}
-
-        self.assertEqual([('A','B','E')], short_path(graph,'A','E'))
-
     def test_simple_path(self):
         graph = {'A': ['B', 'C'],
                      'B': ['C', 'D'],
@@ -142,6 +118,15 @@ class Desafio2(unittest.TestCase):
                      'E': ['F'],
                      'F': ['C']}
         self.assertEqual([('A','B')], short_path(graph,'A','B'))
+
+    def test_complex_path(self):    
+        graph = {'A': ['B', 'C'],
+               'B': ['D', 'E'],
+               'C': ['D'],
+               'D': ['E'],
+               'E': []}
+        self.assertEqual([('A','B','E')], short_path(graph,'A','E')) 
+   
 
     def test_multiple_path(self):
         graph = {'A': ['B', 'C'],
@@ -153,7 +138,7 @@ class Desafio2(unittest.TestCase):
         sp = short_path(graph,'A','D')
         sp.sort()
         self.assertEqual([ ('A','B','D'),('A','C','D')],sp)
->>>>>>> upstream/master
+
 
 if __name__ == '__main__':
     unittest.main()    

@@ -2,29 +2,6 @@
 Desafio PUG-PE  
 ID: 2
 Semana: 19/02/2011
-<<<<<<< HEAD
-
-Problema:
-
-    Escreva uma funcao que reverta a ordem das palavras em uma string. Por exemplo, sua funcao deve transformar a string 'Do or do not,
-    there is no try.'  para 'try. no is there not, or Do'.  Assuma que todas palavras sao separadas por espaco e trate todos os sinais de pontuacao
-    como caracteres.
-
-    >>> x =  "attempt"
-    >>> ret = reverse_string(x)
-    >>> ret
-    attempt
-    >>> x = 'I am going to jail.'
-    >>> ret = reverse_string(x)
-    jail. to going am I
-    >>> x = 'Python como linguagem eh poderosa, facil e divertida.'
-    >>> x = []
-    >>> ret = reverse_string(x)
-    >>> ret
-    divertida. e facil poderosa, eh linguagem como Python
-     
-  Seu trabalho eh construir essa lista de elementos.  Favor utilizar Testes usando doctest ou UnitTest para validar sua solucao.
-=======
 Formulado por : Daker Fernandes e Marcel Caraciolo
 
 Problema:
@@ -74,32 +51,43 @@ Problema:
 
      
   Seu trabalho eh construir essa funcao.  Favor utilizar Testes usando doctest ou UnitTest para validar sua solucao.
->>>>>>> upstream/master
 
 """
+s = str(); aux = list(); res = list(); prev = dict();
+def find_path( pos, path ):
+	path.insert( 0, pos )
+	if pos == s:
+		res.append( tuple( path ) )
+	else:
+		for i in prev[ pos ]:
+			find_path( i, path )
+	path.pop(0)
+def short_path(graph,start,finish):
+	global prev, tam, res, aux, s
+	s = start
+	keys = graph.keys()
+	if not graph or not (start in keys) or not (finish in keys): return None
+	n = len(graph)
+	dist = dict()
+	prev = dict()
+	for k in keys: prev[k] = list(); dist[k] = 0x01010101
+	dist[start]=0
+	for k in xrange(n):
+		for i in xrange(n):
+			for j in graph[ keys[i] ]:
+				if dist[ keys[i] ] + 1 < dist[ j ]:
+					prev[ j ] = [ keys[i] ]
+					dist[ j ] = dist[ keys[i] ] + 1
+				elif dist[ keys[i] ] + 1 == dist[ j ] and not (keys[i] in prev[j]):
+					prev[ j ].append( keys[i] )
+	res = list()
+	aux = list()
+	find_path( finish, aux )
+	return res
 
 import unittest
 
 
-<<<<<<< HEAD
-class Desafio1(unittest.TestCase):
-
-    def test_simple_string(self):
-        sampleString = 'attempt'
-        self.assertEqual('attempt',
-                    reverse_string(sampleString))
-
-    def test_empty_string(self):
-        sampleString = ''
-        self.assertEqual('',
-                    reverse_string(sampleString))
-
-    def test_complex_string(self):
-        sampleString = 'Python como linguagem eh poderosa, facil e divertida.'
-        self.assertEqual('divertida. e facil poderosa, eh linguagem como Python',
-                    reverse_string(sampleString))
-
-=======
 class Desafio2(unittest.TestCase):
 
     def test_empty_graph(self):
@@ -153,7 +141,6 @@ class Desafio2(unittest.TestCase):
         sp = short_path(graph,'A','D')
         sp.sort()
         self.assertEqual([ ('A','B','D'),('A','C','D')],sp)
->>>>>>> upstream/master
 
 if __name__ == '__main__':
     unittest.main()    
